@@ -1,6 +1,5 @@
 use chrono::{DateTime, Local};
 
-
 #[derive(PartialEq)]
 pub enum SystemMessageType {
     Info,
@@ -19,6 +18,7 @@ pub enum MessageType {
     Connection,
     Disconnection,
     Text(String),
+    PrivateText(String),
     System(String, SystemMessageType),
     Progress(ProgressState),
 }

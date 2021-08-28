@@ -62,6 +62,15 @@ fn draw_messages_panel(
                     ui_message.extend(parse_content(content, theme));
                     Spans::from(ui_message)
                 }
+                MessageType::PrivateText(content) => {
+                    let mut ui_message = vec![
+                        Span::styled(date, Style::default().fg(theme.date_color)),
+                        Span::styled(&message.user, Style::default().fg(color)),
+                        Span::styled(" (pri): ", Style::default().fg(color)),
+                    ];
+                    ui_message.extend(parse_content(content, theme));
+                    Spans::from(ui_message)
+                }
                 MessageType::System(content, msg_type) => {
                     let (user_color, content_color) = match msg_type {
                         SystemMessageType::Info => theme.system_info_color,

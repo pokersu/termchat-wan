@@ -123,7 +123,7 @@ impl<'a> Application<'a> {
             }
             NetMessage::WhisperMessage(from, to, content) => {
                 if to == self.config.user_name {
-                    self.state.add_message(ChatMessage::new(from.into(), MessageType::Text(content)));
+                    self.state.add_message(ChatMessage::new(from.into(), MessageType::PrivateText(content)));
                     self.righ_the_bell();
                 }
             }
