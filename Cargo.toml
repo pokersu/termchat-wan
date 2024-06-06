@@ -13,7 +13,7 @@ categories = ["command-line-utilities", "command-line-interface"]
 message-io = "0.14"
 serde = { version = "1.0.124", features = ["derive"] }
 #keep the same version as tui for faster compile time
-crossterm = "0.18.2"
+crossterm = "0.27.0"
 tui = { version = "0.14.0", default-features = false, features = ['crossterm', 'serde'] }
 whoami = "1.1.0"
 chrono = "0.4.19"
@@ -33,8 +33,21 @@ rand = "0.8.3"
 [features]
 ui-test = []
 
+
 [[bin]]
-name = "app"
+name = "app-arm64"
+path = "src/bin/client.rs"
+
+[[bin]]
+name = "app-darwin"
+path = "src/bin/client.rs"
+
+[[bin]]
+name = "app-win"
+path = "src/bin/client.rs"
+
+[[bin]]
+name = "app-lin"
 path = "src/bin/client.rs"
 
 

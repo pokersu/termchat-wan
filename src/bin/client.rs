@@ -9,7 +9,7 @@ use termchat_wan::commands::send_file::SendFileCommand;
 use termchat_wan::commands::whisper_message::SendWhisperCommand;
 use termchat_wan::config::Config;
 use termchat_wan::events::Event;
-use crossterm::event::{Event as TermEvent, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{Event as TermEvent, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use message_io::node::{self, NodeEvent, NodeHandler, NodeListener};
 use message_io::network::{NetEvent, Endpoint, Transport};
 use std::time::Duration;
@@ -171,9 +171,12 @@ impl<'a> Application<'a> {
 
     fn process_terminal_event(&mut self, term_event: TermEvent, server: &Endpoint) {
         match term_event {
+            TermEvent::FocusGained => (),
+            TermEvent::FocusLost => (),
+            TermEvent::Paste(_) => (),
             TermEvent::Mouse(_) => (),
             TermEvent::Resize(_, _) => (),
-            TermEvent::Key(KeyEvent { code, modifiers }) => match code {
+            TermEvent::Key(KeyEvent { code, modifiers, kind, .. }) => match code {
                 KeyCode::Esc => {
                     self.handler.signals().send_with_priority(Event::Close(None));
                 }
@@ -182,7 +185,10 @@ impl<'a> Application<'a> {
                         self.handler.signals().send_with_priority(Event::Close(None));
                     }
                     else {
-                        self.state.input_write(character);
+                        match kind {
+                            KeyEventKind::Press => {self.state.input_write(character);},
+                            _ => ()
+                        }
                     }
                 }
                 KeyCode::Enter => {
@@ -251,7 +257,7 @@ impl<'a> Application<'a> {
         match action.process(&mut self.state, handler, server) {
             Processing::Completed => (),
             Processing::Partial(delay) => {
-                self.handler.signals().send_with_timer(Event::Action(action), delay)
+                self.handler.signals().send_with_timer(Event::Action(action), delay);
             }
         }
     }

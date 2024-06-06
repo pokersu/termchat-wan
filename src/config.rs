@@ -15,7 +15,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            server_addr: "180.215.196.158:5877".parse().unwrap(),
+            server_addr: "103.235.19.158:5877".parse().unwrap(),
             // server_addr: "127.0.0.1:5877".parse().unwrap(),
             user_name: whoami::username(),
             terminal_bell: true,
